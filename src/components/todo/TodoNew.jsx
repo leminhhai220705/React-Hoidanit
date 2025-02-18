@@ -8,10 +8,11 @@ const TodoNew = (props) => {
 
     const { addNewTodo } = props;
 
+
     // addNewTodo("ERIC");
 
     const handleClick = () => {
-        console.log(valueInput)
+        addNewTodo(valueInput)
     }
 
     const handleChange = (name) => {
