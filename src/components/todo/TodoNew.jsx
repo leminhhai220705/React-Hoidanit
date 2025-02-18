@@ -4,7 +4,7 @@ const TodoNew = (props) => {
 
     // useState hook (getter/setter): 
     // const valueInput = "eric";
-    const [valueInput, setValueInput] = useState("eric")
+    const [valueInput, setValueInput] = useState("")
 
     const { addNewTodo } = props;
 
@@ -13,6 +13,7 @@ const TodoNew = (props) => {
 
     const handleClick = () => {
         addNewTodo(valueInput)
+        setValueInput("");
     }
 
     const handleChange = (name) => {
@@ -28,6 +29,7 @@ const TodoNew = (props) => {
                 }
             } type="text"
                 onChange={(e) => { handleChange(e.target.value) }}
+                value={valueInput}
             />
             <button className='button'
                 onClick={handleClick}
