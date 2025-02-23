@@ -1,0 +1,14 @@
+1, download thư viện react-router (dùng cho truy cập các path)
+ * npm i --save-exact react-router-dom@<version>
+ * trong react-router la bao gom RouterProvider va createBrowserRouter
+
+2, props, state-hook: 
+ * Props chính là các thuộc tính và method được truyền từ class cha sang class con, props được định dạng bằng object
+ * State-Hook chính là bộ nhớ lưu trữ tạm thời của React (const [<value>, <setValue>]) = useState(<giá trị khởi tạo>)
+
+3, Cách viết JS trong html, attribute và css inline
+ * để viết một js trong html, ta dùng một cặp dấu {} và viết js trong cặp dấu đó
+ * để viết attribute với giá trị là js, ta cũng dùng {} và viết js trong đó
+ * để viết css inline, ta cũng dùng {} và viết js trong đó
+ NOTE: Nếu dùng toán tử 3 ngôi hoặc toán tử &&, nếu như kết quả của điều kiện là một phần tử html, thì ta dùng cặp dấu ngoặc nhọn để viết 
+ tất cả những dòng JS điều kiện cũng như là các phần tử html (ko thêm dấu nào khác)
