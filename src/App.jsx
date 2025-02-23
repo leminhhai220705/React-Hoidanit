@@ -5,17 +5,9 @@ import TodoNew from './components/todo/TodoNew'
 import { useState } from 'react'
 
 const App = () => {
-  const [todoList, setTodoList] = useState([
-    { id: 1, name: "Learning React" },
-    { id: 2, name: "Watching Youtube" }
-  ])
+  const [todoList, setTodoList] = useState([])
 
-  const hoidanit = "Eric ManCity";
-  const age = 25;
-  const data = {
-    address: "Hanoi",
-    country: "Vietnam",
-  }
+
 
   const addNewTodo = (name) => {
 
@@ -38,9 +30,6 @@ const App = () => {
         addNewTodo={addNewTodo}
       />
       <TodoData
-        name={hoidanit}
-        age={age}
-        data={data}
         todoList={todoList}
       />
       <div className='todo-image'>
