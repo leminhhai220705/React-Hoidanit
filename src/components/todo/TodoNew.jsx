@@ -16,6 +16,10 @@ const TodoNew = (props) => {
         //     alert("Please enter the value")
         //     return;
         // }
+        if (!valueInput) {
+            alert("Please enter something...");
+            return;
+        }
         addNewTodo(valueInput)
         setValueInput("");
     }
