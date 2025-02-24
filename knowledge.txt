@@ -17,3 +17,4 @@
 
 5, Link; NavLink: 
 
+6, Index Route
