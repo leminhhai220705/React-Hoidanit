@@ -12,3 +12,5 @@
  * để viết css inline, ta cũng dùng {} và viết js trong đó
  NOTE: Nếu dùng toán tử 3 ngôi hoặc toán tử &&, nếu như kết quả của điều kiện là một phần tử html, thì ta dùng cặp dấu ngoặc nhọn để viết 
  tất cả những dòng JS điều kiện cũng như là các phần tử html (ko thêm dấu nào khác)
+
+4, Outlet: 
