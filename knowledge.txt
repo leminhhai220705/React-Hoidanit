@@ -14,3 +14,5 @@
  tất cả những dòng JS điều kiện cũng như là các phần tử html (ko thêm dấu nào khác)
 
 4, Outlet: 
+
+5, Link: 
