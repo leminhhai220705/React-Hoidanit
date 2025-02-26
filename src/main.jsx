@@ -18,6 +18,7 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       {
+        // path = homepage
         index: true,
         element: <TodoApp />
       },

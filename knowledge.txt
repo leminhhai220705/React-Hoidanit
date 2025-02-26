@@ -1,22 +1,68 @@
-1, download thư viện react-router (dùng cho truy cập các path)
- * npm i --save-exact react-router-dom@<version>
- * trong react-router la bao gom RouterProvider va createBrowserRouter
-
-2, props, state-hook: 
+1, props, state-hook: 
  * Props chính là các thuộc tính và method được truyền từ class cha sang class con, props được định dạng bằng object
  * State-Hook chính là bộ nhớ lưu trữ tạm thời của React (const [<value>, <setValue>]) = useState(<giá trị khởi tạo>)
 
-3, Cách viết JS trong html, attribute và css inline
+2, Cách viết JS trong html, attribute và css inline
  * để viết một js trong html, ta dùng một cặp dấu {} và viết js trong cặp dấu đó
  * để viết attribute với giá trị là js, ta cũng dùng {} và viết js trong đó
  * để viết css inline, ta cũng dùng {} và viết js trong đó
  NOTE: Nếu dùng toán tử 3 ngôi hoặc toán tử &&, nếu như kết quả của điều kiện là một phần tử html, thì ta dùng cặp dấu ngoặc nhọn để viết 
  tất cả những dòng JS điều kiện cũng như là các phần tử html (ko thêm dấu nào khác)
 
-4, Outlet: 
+3, download thư viện react-router (dùng cho truy cập các path)
+ * npm i --save-exact react-router-dom@<version>
+ * trong react-router la bao gom RouterProvider va createBrowserRouter
 
-5, Link; NavLink: 
+4, Nested Route với Outlet: 
+ - Để có thể sử dụng kế thừa với Outlet
+ b1: ở main.jsx, ta xác định main page và các child page
+ b2: khi xác định được main page rồi, ta sẽ dùng một object con bên trong bao gồm key là children với value là các child pages (path, element) => các child pages sẽ
+ kế thừa tất cả bố cục của phần tử main page 
+ b3: sau khi các children pages kế thừa các main pages, ta cần phải xác định vị trí của các phần tử con ở bên trong main page đó (tại vì sau 
+ khi kế thừa lại main page thì các nội dung và bố cục của child pages vẫn chưa đc xác định vị trí cần đc render) => ta truy cập vào src main page
+ (ví dụ là App.jsx là main page), sau đó viết cú pháp "<Outlet/>" (đại diện cho phần tử con được render vào phần tử cha) vào vị trí thích hợp
+ (nếu chưa import outlet, thì bấm ctrl + space để gợi ý import)
+
+
+5, Link; NavLink (thay thế thẻ a khi chuyển trang)
+ - Link (property là 'to="<link đường dẫn thẻ con bên file main.jsx>"'): thẻ Link dùng để loại bỏ phần reload trang (thường áp dụng với phần nav (thanh điều hướng trang))
+ - NavLink: Giống với thẻ Link nhưng nó sẽ có thêm thuộc tính css class = "active", tức là khi bấm vào phần tử nào thì phần tử đó sẽ có class là
+ 'active' (thường áp dụng cho việc in đậm màu khi bấm vào một phần tử nào đó trong thanh điều hướng). Ví dụ muốn chuyển sang trang item, thì khi
+ bấm vào thanh điều hướng ô item, ô đó sẽ áp dụng css theo class active (thường là sẽ cho thêm màu background khi hiện lên) (luôn nhớ phải 
+ import thư viện)
 
 6, Index Route (children)
+ - Khi ta muốn sinh ra thêm một child page mặc định sẽ kế thừa lại tất cả các phần tử cũng như đường dẫn của thằng cha (không bao gồm path), thì
+ ta dùng index route
+ b1: cũng giống như nested route, ta viết một object con bên trong main page, 
+ b2: sau đó viết 2 key là index: true; và element: <viết giá trị cần
+ được hiện>, 
+ b3: sau khi khởi tạo xong thì main page sẽ auto hiện ra phần tử child page vừa khai báo (đương nhiên là vẫn phải xác định nó render ở đâu
+ bằng outlet)
 
 7, Error (handle 404 Not Found)
+ - ta có thêt tạo một file error.jsx, sau đó gán phần code sau: 
+ '
+import { NavLink, useRouteError } from "react-router-dom";
+
+export default function ErrorPage() {
+    const error = useRouteError();
+    // console.error(error);
+
+    return (
+        <div id="error-page">
+            <h1>Oops!</h1>
+            <p>Sorry, an unexpected error has occurred.</p>
+            <p>
+                <i>{error.statusText || error.message}</i>
+            </p>
+            <div>
+                <NavLink to="/"><span>Back to Home Page</span></NavLink> // đường dẫn tới homepage khi phát hiện lỗi 404 not found
+            </div>
+        </div>
+    );
+}
+ '
+
+ sau đó ta cần phải khai báo root (ứng với đường path = "/"), khai báo key là errorElement: <ErrorPage/> nhằm khi có lỗi not found, nó sẽ hiện ngay lỗi
+ với bố cục đẹp hơn
