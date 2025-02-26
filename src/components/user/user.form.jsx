@@ -2,17 +2,15 @@ import { Button, Input } from "antd"
 import { useState } from "react";
 const UserForm = () => {
 
+    const [fullName, setFullName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
     const [phone, setPhone] = useState("");
 
-    const handleChange = (input) => {
 
-        // Chỉ cho phép nhập số (0-9) và không chứa ký tự khác
-        if (/^\d*$/.test(input)) {
-            setPhone(input);
-        } else {
-            alert("Only allow the number")
-            return;
-        }
+    const handleClickBtn = () => {
+        console.log({ fullName, email, password, phone });
+
     }
     return (
         <div className="user-form" style={{
@@ -25,26 +23,48 @@ const UserForm = () => {
             }}>
                 <div>
                     <span>Full Name</span>
-                    <Input />
+                    <Input
+                        value={fullName}
+                        onChange={(e) => {
+                            setFullName(e.target.value)
+                        }}
+                    />
                 </div>
 
                 <div>
                     <span>Email</span>
-                    <Input />
+                    <Input
+                        value={email}
+                        onChange={(e) => { setEmail(e.target.value) }}
+                    />
                 </div>
 
                 <div>
                     <span>Password</span>
-                    <Input.Password />
+                    <Input.Password
+                        value={password}
+                        onChange={(e) => { setPassword(e.target.value) }}
+                    />
                 </div>
 
                 <div>
                     <span>Phone Number</span>
-                    <Input value={phone} onChange={(e) => { handleChange(e.target.value) }} />
+                    <Input value={phone}
+                        onChange={(e) => {
+                            if (/^\d*$/.test(e.target.value)) {
+                                setPhone(e.target.value);
+                            } else {
+                                alert("Please enter number");
+                                return;
+                            }
+                        }}
+                    />
                 </div>
 
                 <div>
-                    <Button type="primary">Create User</Button>
+                    <Button type="primary"
+                        onClick={handleClickBtn}
+                    >Create User</Button>
                 </div>
             </div>
         </div>
