@@ -180,3 +180,9 @@ Giải thích:
 giải thích: ta sẽ định nghĩa tham số môi trường link api bên file .env(cả production và development), sau đó ta dùng cú pháp 'import.meta.env.<tên tham số môi trường đã định nghĩa bên file .env>'
 chính là giá trị bên trong phần baseURL mà ta đã định nghĩa lúc đầu với link api, bản chất chỉ là import link api vào trong đó thôi (xem lại phần 10.a)
 sau này nếu có nhiều link url api, ta chỉ cần thay đổi ở bên .env hoặc thêm tên tham số định nghĩa môi trường rồi sau đó import và file interceptor
+
+
+12, Lifecycle (useEffect hook)
+
+NOTE IMPORTANT: mỗi khi ta fetch api để lấy dữ liệu, lưu vào trong state và sau đó render dữ liệu ra giao diện, ta cần phải viết hàm đó 
+BÊN TRONG HÀM USEEFFECT
