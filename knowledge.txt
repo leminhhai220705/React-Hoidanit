@@ -66,3 +66,117 @@ export default function ErrorPage() {
 
  sau đó ta cần phải khai báo root (ứng với đường path = "/"), khai báo key là errorElement: <ErrorPage/> nhằm khi có lỗi not found, nó sẽ hiện ngay lỗi
  với bố cục đẹp hơn
+
+BONUS: các thẻ input thường được kiểm soát bởi các state hook, nên khi có ô input, ta cần kết hợp chúng với việc lưu dữ liệu nhập vào ô input đó vào trong phần state hook
+sau đó kiểm soát value = với chính giá trị state đó, mỗi lần thay đổi thì dùng onchange để set mới value đó lưu vào state
+
+8, axios: là một thư viện dùng để thao tác với dữ liệu data từ frontend tới backend và database (<địa chỉ URL từ phía backend liên quan tới các thao tác như thêm sửa xoá lấy>,<data các thông tin dữ liệu (lưu dưới dạng object)>)
+ - POST: tạo mới dữ liệu
+ - GET: lấy dữ liệu
+ - UPDATE: cập nhật dữ liệu
+ - DELETE: xoá dữ liệu
+* tương tự dùng với axios: 
+axios.post(URL_DATA, OBJECT_DATA): thêm mới dữ liệu
+_____.get("tương tự như trên"): lấy dữ liệu
+     .update("như trên"): update dữ liệu
+     .delete("như trên"): xoá dữ liệu
+NOTE: Link url sẽ đc cung cấp từ backend, vì đây là khoá fe nên ko cần phải tìm hiểu url đó từ đâu, và OBJECT_DATA phải có các key giống với các key đã đc set bên backend trong url api đó
+API: bản chất là một url chứa các object được viết dưới dạng chuỗi JSON và dùng để thao tác dữ liệu từ fe tới be và database
+
+9, 
+async (Bất đồng bộ): các trình tự xảy ra không theo lần lượt hay thứ tự, nó sẽ có thời gian được quy định để trả về kết quả, các kết quả trả về
+như Promise, await, các thao tác như setTimeOut, setInterval sẽ đc coi là async 
+sync (Đồng bộ): các trình tự xảy ra theo thứ tự, return kết quả ngay lập tức khi hàm kết thúc mà ko bị ràng buộc bởi tgian hay trình tự nào đó
+Đồng bộ sẽ ko xảy ra với Promise, await, hay các thao tác với tgian như settimeout, setInterval
+
+
+
+
+10, Mô hình interceptor: xử lý respone API
+ a. xử lý tinh gọn code để dễ bảo trì cho link url api backend
+ - Thay vì ta đưa hẳn đường link api vào trong file api.service.js, ta có thể cấu hình nó ở bên trong chính thư mục service và tạo mới một
+ file có tên axios.customize.js, gán đường code này: 
+ 
+" import axios from "axios";
+
+// Set config defaults when creating the instance
+const instance = axios.create({
+    baseURL: 'http://localhost:8080'
+});
+
+// Alter defaults after instance has been created
+// instance.defaults.headers.common['Authorization'] = AUTH_TOKEN;
+
+export default instance; "
+
+sau đó quay lại file chứa api và chỉ gán nội dung đuôi của link api
+VD: thay vì gán full http://localhost:8080/api/v1/user thì ta có thể định nghĩa cụ thể đường link backend ra file customize (ko bao gồm các
+nội dung đuôi) giống như này: http://localhost:8080; sau đó ta import vào trong file api.service với câu lệnh import axios from './axios.customize' rồi tiếp đến ta 
+chỉ cần định nghĩa đuôi của link api giống như này: /api/v1/user
+=> giúp code dễ dàng bảo trì và sửa đổi nếu như đường link url backend bị sửa đổi
+
+b. xử lý tinh gọn phần respone.data cho đơn giản hơn
+ - Vẫn trong file axios.customize.js, ta paste đoạn code sau: 
+
+" instance.interceptors.request.use(function (config) {
+    // Do something before request is sent
+    return config;
+}, function (error) {
+    // Do something with request error
+    return Promise.reject(error);
+});
+
+// Add a response interceptor
+instance.interceptors.response.use(function (response) {
+    // Any status code that lie within the range of 2xx cause this function to trigger
+    // Do something with response data
+    if (response.data && response.data.data) return response.data;
+
+    return response;
+}, function (error) {
+    // Any status codes that falls outside the range of 2xx cause this function to trigger
+    // Do something with response error
+    return Promise.reject(error);
+}); "
+
+Giải thích: 
+ - ở phần respone, ta thấy đoạn code: if (response.data && response.data.data) return response.data; tức là ở trong file cấu hình axios interceptor, 
+ respone sẽ trả ra một promise khi fetch api thành công (giống như cách làm thông thường), để cho phần log tối giải hơn thì ta có thể loại bỏ
+ phần log respone.data.data để chỉ cần ghi respone.data thôi, lúc này respone.data.data đã ko còn, ta chỉ cần ghi là respone.data mà thôi
+
+ - phần interceptor này sẽ đc gửi trước khi fetch (tức là dữ liệu đc gửi về fe từ be) ở bên frontend, nên ta có thể ngăn chặn nó gửi phức tạp dữ liệu trước khi fetch bên frontend bằng 
+ cách cấu hình lại bên trong phần respone với đoạn code trên
+
+ Tổng thể giải thích: 
+  - bản chất interception chính là phần axios, vì khi trong file api.service.js, thay vì ta dùng thư viện axios theo truyền thống (import axios
+  from 'axios') thì ta đã cấu hình interception bên file axios.customize.js và khi export default instance, thì chính instance đó là một axios
+  được tự tạo ra bằng interception, và ta sẽ import axios từ chính file cấu hình interception. Lúc này, ta đã định nghĩa full đường link url
+  api backend bên file interception (axios.customize.js), về sau ta chỉ cần định nghĩa tiền tố đuôi (ví dụ như /api/v1/user) cho phần URL_BACKEND
+  ở file api.service.js (file xử lý fetch api), giống như ta nối link full url api bên interception với path dẫn ở file api.service (file xử lý
+  fetch api)
+  - tiếp theo, ta có đoạn code như phần b ở bên, ta thấy trong file interceptor các request, respone và error đề return ra kết quả của fetch (tức là kết quả
+  của phần xử lý fetch bên file xử lý fetch api (api.service)) => ta có thể điều chỉnh phần return hoặc xử lý lỗi return ở file interceptor: 
+  VD: để giúp cho đơn giản phần log ra kết quả thành công của respone, ta chỉ cần viết: ' if (response.data && response.data.data) return response.data;' 
+  (nếu có data và có phần data ở bên trong nữa), thì ta chỉ cần return ra respone.data => phần res trả về ko phải là full respone nữa mà là phần
+  respone.data (res === response.data)
+
+  - cũng như error, thay vì ta return ra full nội dung error, ta có thể cắt giảm nó bằng cách viết nội dung như sau: 
+  ' if (error.response && error.response.data) return error.response.data' tức là nếu như có phần response và trong response có phần data
+  thì res chỉ cần return lỗi ở phần error.response.data mà thôi
+
+  - NOTE: phần inteceptor sẽ đc return ra trước rồi sau đó mới in ra các thông tin ở phần file handleFetch (fe nhận thông tin từ be)
+ 
+ 11. Cấu hình file .env (.env.production: dành cho phần build) và (.env.development: dành cho dev)
+  - phần 10 ta đã làm xong phần cấu hình interceptor cho link api cũng như cho phần request và respone ở file axios.customize.js, lúc này
+  khi dự án có quá nhiều link url api để build, ta cần phải có file setup môi trường để mỗi khi thay đổi url api, ta chỉ cần thay đổi bên trong
+  file .env
+
+  VD: 
+  - lúc đầu: baseURL: 'http://localhost8080'
+  - về sau 
+   + file .env (production và development): VITE_BACKEND_URL: http://localhost8080 
+   + file interceptor: baseURL: import.meta.env.<tên định nghĩa bên file .env, ở đây thì chính là VITE_BACKEND_URL>
+
+giải thích: ta sẽ định nghĩa tham số môi trường link api bên file .env(cả production và development), sau đó ta dùng cú pháp 'import.meta.env.<tên tham số môi trường đã định nghĩa bên file .env>'
+chính là giá trị bên trong phần baseURL mà ta đã định nghĩa lúc đầu với link api, bản chất chỉ là import link api vào trong đó thôi (xem lại phần 10.a)
+sau này nếu có nhiều link url api, ta chỉ cần thay đổi ở bên .env hoặc thêm tên tham số định nghĩa môi trường rồi sau đó import và file interceptor

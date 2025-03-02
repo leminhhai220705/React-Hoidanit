@@ -1,0 +1,92 @@
+1, Sử dụng với thẻ Button
+
+ - 	Antd Button có sẵn CSS đẹp, hỗ trợ nhiều loại button (primary, default, dashed, link, text, ghost…).
+
+ VD: <Button type="primary">Antd Button</Button>
+
+ - Antd Button có thêm các tính năng như:
+
+	•	Loading trạng thái (loading={true})
+
+	•	Disabled tự động (disabled={true})
+
+	•	Icon hỗ trợ dễ dàng (icon={<DownloadOutlined />})
+
+ VD: <Button type="primary" loading={true}>Loading Button</Button>
+
+ - 	•	Antd Button hỗ trợ Icons rất dễ dàng với thư viện @ant-design/icons.
+
+	•	Button thường phải tự thêm <img> hoặc dùng thư viện icon khác.
+
+ VD: 
+
+<Button type="primary" icon={<DownloadOutlined />}>Download</Button>
+
+
+
+2, Sử dụng với thẻ Input
+
+ -  Kết hợp với Icon
+
+ VD: <Input placeholder="Tìm kiếm..." prefix={<SearchOutlined />} />
+
+ - Hỗ trợ trạng thái (disabled, error, loading)
+
+ VD: <Input placeholder="Không thể nhập" disabled />
+
+     <Input placeholder="Lỗi nhập" status="error" />
+
+     <Input placeholder="Nhập số điện thoại" allowClear />
+
+ - Input Password, TextArea
+
+ VD: <Input.Password placeholder="Nhập mật khẩu" />
+
+     <Input.TextArea placeholder="Nhập ghi chú" rows={4} />
+
+ - Thay vì nhấn onKeyDown thì ta dùng onPressEnter ở Input với thư viện antd
+
+ VD:  <Input placeholder="Nhấn Enter để gửi" onPressEnter={handleEnter} />
+
+3, Sử dụng Notification với Antd: 
+
+ -  Kiểu mặc định (open): 
+
+ VD: notification.open({
+    message: "Tiêu đề",
+    description: "Nội dung thông báo",
+});
+
+ - Các kiểu thông báo đặc biệt: 
+
+ VD: 
+ notification.success({
+    message: "Thành công",
+    description: "Dữ liệu đã được lưu thành công!",
+});
+
+notification.error({
+    message: "Lỗi",
+    description: "Có lỗi xảy ra, vui lòng thử lại!",
+});
+
+notification.warning({
+    message: "Cảnh báo",
+    description: "Bạn có chắc muốn xóa không?",
+});
+
+notification.info({
+    message: "Thông tin",
+    description: "Đây là một thông báo thông tin!",
+});
+
+- Tùy chỉnh vị trí và thời gian hiển thị
+	•	Vị trí: topLeft, topRight, bottomLeft, bottomRight
+	•	Thời gian hiển thị: duration (mặc định 4.5s, 0 là không tự tắt)
+
+VD: notification.success({
+    message: "Thành công",
+    description: "Bạn đã đăng nhập thành công!",
+    placement: "bottomRight",  // Góc dưới bên phải
+    duration: 2, // Hiển thị 2 giây
+});
